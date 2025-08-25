@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "blockusplus",
+	"id": "blockus-polymer-patch",
 	"version": "${version}",
-	"name": "BlockusPlus",
-	"description": "Blockus for Polymer Patch",
+	"name": "Polymer Patch for Blockus",
+	"description": "Polymer Patch for Blockus",
 	"authors": [
 		"稀神灵梦"
 	],
@@ -14,10 +14,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"cc.thonly.blockusplus.BlockusPlus"
+			"cc.thonly.blockuspatch.BlockusPolymerPatch"
 		],
 		"fabric-datagen": [
-			"cc.thonly.blockusplus.BlockusPlusDataGenerator"
+			"cc.thonly.blockuspatch.BlockusPolymerPatchDataGenerator"
 		]
 	},
 	"accessWidener": "blockusplus.accesswidener",
@@ -26,9 +26,14 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.0",
-		"minecraft": "~1.21.7",
+		"minecraft": "~1.21.6",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"polymer-core": "*",
+		"polymer-networking": "*",
+		"polymer-virtual-entity": "*",
+		"polymer-resource-pack": "*",
+		"blockus": "*"
 	},
 	"suggests": {
 		"another-mod": "*"
