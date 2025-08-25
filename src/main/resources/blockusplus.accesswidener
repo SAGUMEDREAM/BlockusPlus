@@ -1,0 +1,8 @@
+accessWidener v2 named
+accessible field net/minecraft/item/BoatItem boatEntityType Lnet/minecraft/entity/EntityType;
+accessible field net/minecraft/block/AbstractBlock$Settings registryKey Lnet/minecraft/registry/RegistryKey;
+accessible method net/minecraft/block/PillarBlock appendProperties (Lnet/minecraft/state/StateManager$Builder;)V
+accessible field net/minecraft/block/Block stateManager Lnet/minecraft/state/StateManager;
+mutable field net/minecraft/block/Block stateManager Lnet/minecraft/state/StateManager;
+accessible method net/minecraft/block/Block setDefaultState (Lnet/minecraft/block/BlockState;)V
+accessible method net/minecraft/block/Block appendProperties (Lnet/minecraft/state/StateManager$Builder;)V

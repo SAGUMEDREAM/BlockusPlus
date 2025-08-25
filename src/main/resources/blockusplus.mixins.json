@@ -1,0 +1,37 @@
+{
+  "required": true,
+  "package": "cc.thonly.blockusplus.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AsphaltBundleMixin",
+    "BlockBuilderMixin",
+    "BlockMixin",
+    "BlockusItemGroupsMixin",
+    "BlockusItemsMixin",
+    "BlockusMixin",
+    "BSSWBundleMixin",
+    "ColoredTilesBundleMixin",
+    "ConcreteBundleMixin",
+    "CopperBundleMixin",
+    "ExampleMixin",
+    "ExtraWoodBundleMixin",
+    "HorizontalFacingBlockMixin",
+    "LegacyStonecutterBlockMixin",
+    "PillarBlockMixin",
+    "PottedLargeBundleMixin",
+    "RegistryMixin",
+    "StainedBlockBundleMixin",
+    "StainedBSSWBundleMixin",
+    "TerraformBoatItemHelperImplMixin",
+    "TimberFrameBundleMixin",
+    "WoodBundleMixin",
+    "WoodenPostBundleMixin",
+    "WoolBundleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+	}
+}

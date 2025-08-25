@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "blockusplus",
+	"version": "${version}",
+	"name": "BlockusPlus",
+	"description": "Blockus for Polymer Patch",
+	"authors": [
+		"稀神灵梦"
+	],
+	"contact": {
+	},
+	"license": "LGPL-3.0-only",
+	"icon": "assets/blockusplus/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"cc.thonly.blockusplus.BlockusPlus"
+		],
+		"fabric-datagen": [
+			"cc.thonly.blockusplus.BlockusPlusDataGenerator"
+		]
+	},
+	"accessWidener": "blockusplus.accesswidener",
+	"mixins": [
+		"blockusplus.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21.7",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
