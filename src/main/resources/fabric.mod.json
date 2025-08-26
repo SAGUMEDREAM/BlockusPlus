@@ -5,7 +5,8 @@
 	"name": "Polymer Patch for Blockus",
 	"description": "Polymer Patch for Blockus",
 	"authors": [
-		"稀神灵梦"
+		"稀神灵梦",
+		"Drex"
 	],
 	"contact": {
 	},
@@ -15,12 +16,8 @@
 	"entrypoints": {
 		"main": [
 			"cc.thonly.blockuspatch.BlockusPolymerPatch"
-		],
-		"fabric-datagen": [
-			"cc.thonly.blockuspatch.BlockusPolymerPatchDataGenerator"
 		]
 	},
-	"accessWidener": "blockusplus.accesswidener",
 	"mixins": [
 		"blockusplus.mixins.json"
 	],

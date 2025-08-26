@@ -1,7 +1,8 @@
 package cc.thonly.blockuspatch.mixin;
 
-import cc.thonly.blockuspatch.item.ItemInit;
+import cc.thonly.blockuspatch.item.PolyBaseItem;
 import com.brand.blockus.registry.content.BlockusItems;
+import eu.pb4.polymer.core.api.item.PolymerItemUtils;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKey;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,12 +17,12 @@ public class BlockusItemsMixin {
     @Inject(method = "register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", at = @At("RETURN"))
     private static void registerItem(String id, Function<Item.Settings, Item> factory, Item.Settings settings, CallbackInfoReturnable<Item> cir) {
         Item item = cir.getReturnValue();
-        ItemInit.registerOverlay(item);
+        PolymerItemUtils.registerOverlay(item, new PolyBaseItem(item));
     }
 
     @Inject(method = "register(Lnet/minecraft/registry/RegistryKey;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", at = @At("RETURN"))
     private static void registerItem(RegistryKey<Item> key, Function<Item.Settings, Item> factory, Item.Settings settings, CallbackInfoReturnable<Item> cir) {
         Item item = cir.getReturnValue();
-        ItemInit.registerOverlay(item);
+        PolymerItemUtils.registerOverlay(item, new PolyBaseItem(item));
     }
 }

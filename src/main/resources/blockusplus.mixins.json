@@ -3,30 +3,13 @@
   "package": "cc.thonly.blockuspatch.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AsphaltBundleMixin",
     "BlockBuilderMixin",
-    "BlockMixin",
     "BlockusItemGroupsMixin",
     "BlockusItemsMixin",
     "BlockusMixin",
-    "BSSWBundleMixin",
-    "ColoredTilesBundleMixin",
-    "ConcreteBundleMixin",
-    "CopperBundleMixin",
-    "ExampleMixin",
-    "ExtraWoodBundleMixin",
-    "HorizontalFacingBlockMixin",
-    "LegacyStonecutterBlockMixin",
-    "PillarBlockMixin",
-    "PottedLargeBundleMixin",
-    "RegistryMixin",
-    "StainedBlockBundleMixin",
-    "StainedBSSWBundleMixin",
+    "BoatItemAccessor",
     "TerraformBoatItemHelperImplMixin",
-    "TimberFrameBundleMixin",
-    "WoodBundleMixin",
-    "WoodenPostBundleMixin",
-    "WoolBundleMixin"
+    "TerraformSignBlockHelperMixin"
   ],
   "injectors": {
     "defaultRequire": 1
