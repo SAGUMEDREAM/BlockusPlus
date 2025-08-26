@@ -17,6 +17,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import xyz.nucleoid.packettweaker.PacketContext;
 
@@ -33,47 +34,52 @@ public class PaneImpl implements FactoryBlock, PolymerTexturedBlock {
     @Override
     public BlockState getPolymerBlockState(BlockState blockState, PacketContext packetContext) {
         return Blocks.GLASS_PANE.getDefaultState()
-                .with(HorizontalConnectingBlock.NORTH, blockState.get(HorizontalConnectingBlock.NORTH))
-                .with(HorizontalConnectingBlock.EAST, blockState.get(HorizontalConnectingBlock.EAST))
-                .with(HorizontalConnectingBlock.SOUTH, blockState.get(HorizontalConnectingBlock.SOUTH))
-                .with(HorizontalConnectingBlock.WEST, blockState.get(HorizontalConnectingBlock.WEST))
-                .with(HorizontalConnectingBlock.WATERLOGGED, blockState.get(HorizontalConnectingBlock.WATERLOGGED));
-//        return Blocks.GLASS_PANE.getDefaultState();
-//        return Blocks.BARRIER.getDefaultState();
+            .with(HorizontalConnectingBlock.NORTH, blockState.get(HorizontalConnectingBlock.NORTH))
+            .with(HorizontalConnectingBlock.EAST, blockState.get(HorizontalConnectingBlock.EAST))
+            .with(HorizontalConnectingBlock.SOUTH, blockState.get(HorizontalConnectingBlock.SOUTH))
+            .with(HorizontalConnectingBlock.WEST, blockState.get(HorizontalConnectingBlock.WEST))
+            .with(HorizontalConnectingBlock.WATERLOGGED, blockState.get(HorizontalConnectingBlock.WATERLOGGED));
     }
 
     @Override
     public @Nullable ElementHolder createElementHolder(ServerWorld world, BlockPos pos, BlockState initialBlockState) {
-        return new FenceImpl.Model(initialBlockState, this.blockId);
+        return new Model(initialBlockState, this.blockId);
     }
 
     public static class Model extends BlockModel {
-        public final ItemDisplayElement post;
-        public final ItemDisplayElement sideAlt;
-        public final Map<Direction, ItemDisplayElement> sides = new HashMap<>();
+        public final Map<Direction, ItemDisplayElement> whenEnabled = new HashMap<>();
+        public final Map<Direction, ItemDisplayElement> whenDisabled = new HashMap<>();
 
         public Model(BlockState state, Identifier id) {
-            ItemStack MODEL_SIDE_ALT = ItemDisplayElementUtil.getModel(Identifier.of(id.getNamespace(), "block/%s_side_alt".formatted(id.getPath())));
-            ItemStack MODEL_NOSIDE = ItemDisplayElementUtil.getModel(Identifier.of(id.getNamespace(), "block/%s_noside".formatted(id.getPath())));
             ItemStack MODEL_POST = ItemDisplayElementUtil.getModel(Identifier.of(id.getNamespace(), "block/%s_post".formatted(id.getPath())));
             ItemStack MODEL_SIDE = ItemDisplayElementUtil.getModel(Identifier.of(id.getNamespace(), "block/%s_side".formatted(id.getPath())));
+            ItemStack MODEL_SIDE_ALT = ItemDisplayElementUtil.getModel(Identifier.of(id.getNamespace(), "block/%s_side_alt".formatted(id.getPath())));
+            ItemStack MODEL_NOSIDE = ItemDisplayElementUtil.getModel(Identifier.of(id.getNamespace(), "block/%s_noside".formatted(id.getPath())));
+            ItemStack MODEL_NOSIDE_ALT = ItemDisplayElementUtil.getModel(Identifier.of(id.getNamespace(), "block/%s_noside_alt".formatted(id.getPath())));
 
-            post = ItemDisplayElementUtil.createSimple(MODEL_POST);
-            sideAlt = ItemDisplayElementUtil.createSimple(MODEL_SIDE_ALT);
+            var post = ItemDisplayElementUtil.createSimple(MODEL_POST);
             post.setScale(new Vector3f(1.00275f));
-            sideAlt.setScale(new Vector3f(1.00275f));
             addElement(post);
-            addElement(sideAlt);
-            for (Direction side : Direction.Type.HORIZONTAL) {
-                var noSide = ItemDisplayElementUtil.createSimple(MODEL_NOSIDE);
-                sides.put(side, ItemDisplayElementUtil.createSimple(MODEL_SIDE));
-                sides.get(side).setYaw(side.getPositiveHorizontalDegrees());
-                sides.get(side).setScale(new Vector3f(1.00275f));
-                noSide.setYaw(side.getPositiveHorizontalDegrees());
-                addElement(noSide);
-                addElement(sides.get(side));
-            }
+
+            // Copied from BlockStateModelGenerator.registerGlassAndPane
+            whenEnabled.put(Direction.NORTH, createItemDisplay(MODEL_SIDE, 0));
+            whenEnabled.put(Direction.EAST, createItemDisplay(MODEL_SIDE, 90));
+            whenEnabled.put(Direction.SOUTH, createItemDisplay(MODEL_SIDE_ALT, 0));
+            whenEnabled.put(Direction.WEST, createItemDisplay(MODEL_SIDE_ALT, 90));
+
+            whenDisabled.put(Direction.NORTH, createItemDisplay(MODEL_NOSIDE, 0));
+            whenDisabled.put(Direction.EAST, createItemDisplay(MODEL_NOSIDE_ALT, 0));
+            whenDisabled.put(Direction.SOUTH, createItemDisplay(MODEL_NOSIDE_ALT, 90));
+            whenDisabled.put(Direction.WEST, createItemDisplay(MODEL_NOSIDE, 270));
+
             this.updateItem(state);
+        }
+
+        private ItemDisplayElement createItemDisplay(ItemStack model, float yRot) {
+            var itemDisplay = ItemDisplayElementUtil.createSimple(model);
+            itemDisplay.setTransformation(new Matrix4f().rotateY((float) ((180 - yRot) * Math.PI / 180f)));
+            itemDisplay.setScale(new Vector3f(1.00275f));
+            return itemDisplay;
         }
 
         private void updateItem(BlockState state) {
@@ -82,14 +88,20 @@ public class PaneImpl implements FactoryBlock, PolymerTexturedBlock {
             boolean south = state.get(HorizontalConnectingBlock.SOUTH);
             boolean west = state.get(HorizontalConnectingBlock.WEST);
 
-            setVisibility(sides.get(Direction.NORTH), north);
-            setVisibility(sides.get(Direction.EAST), east);
-            setVisibility(sides.get(Direction.SOUTH), south);
-            setVisibility(sides.get(Direction.WEST), west);
+            setVisibility(Direction.NORTH, north);
+            setVisibility(Direction.EAST, east);
+            setVisibility(Direction.SOUTH, south);
+            setVisibility(Direction.WEST, west);
         }
 
-        private void setVisibility(ItemDisplayElement elem, boolean visible) {
-            elem.setViewRange(visible ? 0.75f : 0f);
+        private void setVisibility(Direction direction, boolean visible) {
+            if (visible) {
+                addElement(whenEnabled.get(direction));
+                removeElement(whenDisabled.get(direction));
+            } else {
+                removeElement(whenEnabled.get(direction));
+                addElement(whenDisabled.get(direction));
+            }
         }
 
         @Override
