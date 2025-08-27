@@ -19,14 +19,14 @@ import org.joml.Vector3f;
 import xyz.nucleoid.packettweaker.PacketContext;
 
 @Getter
-public class PottedPlantImpl implements PolymerTexturedBlock, FactoryBlock {
+public class PottedPlantPolymerBlock implements PolymerTexturedBlock, FactoryBlock {
     private final Identifier blockId;
     private final ItemStack MODEL;
 
-    public PottedPlantImpl(Identifier blockId) {
+    public PottedPlantPolymerBlock(Identifier blockId) {
         this(blockId, false);
     }
-    public PottedPlantImpl(Identifier blockId, boolean useExtraModel) {
+    public PottedPlantPolymerBlock(Identifier blockId, boolean useExtraModel) {
         this.blockId = blockId;
         MODEL = ItemDisplayElementUtil.getModel(Identifier.of(blockId.getNamespace(), "block/%s".formatted(useExtraModel ? blockId.getPath() : blockId.getPath().replace("potted_", ""))));
     }
